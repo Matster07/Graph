@@ -78,11 +78,11 @@ void main() {
 
         file = fopen("graph.dot", "w");
         if (file != NULL) {
-            fprintf(file, "digraph mainGraph {\n");
+            fprintf(file, "graph mainGraph {\n");
 
             for (int i = 0; i < numbVert; i++) {
                 for (int j = 0; j < verticales[i].arrEdgesLen; j++) {
-                    fprintf(file, "  %d -> %d\n", verticales[i].value, verticales[i].arrEdges[j]);
+                    fprintf(file, "  %d -- %d\n", verticales[i].value, verticales[i].arrEdges[j]);
                 }
             }
 
@@ -91,6 +91,70 @@ void main() {
             printf("Error during writing file!");
             exit("Error");
         }
+
+
+        findVerticaleWithMaxEdges(&verticales, numVert);
+        checkCoherence(&verticales, numbVert);
     }
+}
+
+void checkCoherence(struct verticale *verticales, int numVerticales) {
+    int numEdges = 0;
+    int flag = 0;
+
+    for (int j = 0; j < numVerticales; j++) {
+        numEdges += verticales[j].arrEdgesLen;
+
+        for (int i = 0; i < verticales[j].arrEdgesLen; i++) {
+            if (verticales[j].value == verticales[j].arrEdges[i]) {
+                flag = 1;
+            }
+
+            for (int k = 0; k < numVerticales; k++) {
+                if ((i != k) && (verticales[j].arrEdges[i]) == verticales[j].arrEdges[k]) {
+                    flag = 1;
+                }
+            }
+        }
+    }
+
+    for (int j = 0; j < numVerticales; j++) {
+        for (int i = 0; i < verticales[j].arrEdgesLen; i++) {
+            if (verticales[j].value == verticales[j].arrEdges[i]) {
+                flag = 1;
+            }
+        }
+    }
+
+
+    if ((numEdges > ((numVerticales-1)*(numVerticales - 2))/2) && flag == 0) {
+        printf("\nThis graph is connectivity\n");
+    } else if (flag == 1) {
+        printf("\nThe requirements are not met\n");
+    } else {
+        printf("\nThis graph is not connectivity\n");
+    }
+}
+
+void findVerticaleWithMaxEdges(struct verticale *verticales, int numVerticales) {
+    int max = 0;
+
+    if (numVerticales != 0) {
+        for (int i = 0; i < numVerticales; i++) {
+            if (verticales[i].arrEdgesLen > max) {
+                max = verticales[i].arrEdgesLen;
+            }
+        }
+
+        for (int j = 0; j < numVerticales; j++) {
+            if (verticales[j].arrEdgesLen == max) {
+                printf("Verticale ¹%d has max number of edges\n", j);
+            }
+        }
+
+    } else {
+        printf("You must have at least one verticale to find one with the max edges!\n");
+    }
+
 }
 
