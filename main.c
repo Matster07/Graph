@@ -93,7 +93,7 @@ void main() {
         }
 
 
-        findVerticaleWithMaxEdges(&verticales, numVert);
+        findVerticaleWithMaxEdges(&verticales, numbVert);
         checkCoherence(&verticales, numbVert);
     }
 }
@@ -148,7 +148,7 @@ void findVerticaleWithMaxEdges(struct verticale *verticales, int numVerticales) 
 
         for (int j = 0; j < numVerticales; j++) {
             if (verticales[j].arrEdgesLen == max) {
-                printf("Verticale ¹%d has max number of edges\n", j);
+                printf("\nVerticale %d has max number of edges\n", j + 1);
             }
         }
 
